@@ -319,7 +319,10 @@ class Client {
     this.regexSubscriptions.set(regexString, regexSubscriptionData);
 
     // auto-subscribe on new matching topics
-    this.topicData.events.addListener(TOPIC_EVENTS.NEW_TOPIC, checkSubscriptionForTopic);
+    // but we don't need to add the Listener every time we subscribe to a regex
+    if (!this.topicData.events.listeners(TOPIC_EVENTS.NEW_TOPIC)){
+      this.topicData.events.addListener(TOPIC_EVENTS.NEW_TOPIC, checkSubscriptionForTopic);
+    }
 
     // add subscriptions to existing topics
     this.topicData
